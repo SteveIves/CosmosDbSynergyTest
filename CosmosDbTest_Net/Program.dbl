@@ -27,9 +27,9 @@ proc
         .else
         data val, a128
         data len, i4
-        xcall getlog("COSMOSDBHOST",val,len)
+        xcall getlog("COSMOS_HOST",val,len)
         host = %atrim(val)
-        xcall getlog("COSMOSDBMASTERKEY",val,len)
+        xcall getlog("COSMOS_KEY",val,len)
         mkey = %atrim(val)
         .endc
 
