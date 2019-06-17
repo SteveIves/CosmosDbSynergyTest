@@ -1,0 +1,58 @@
+
+namespace SynPSG.TraditionalSynergyTools
+
+    public static class Console
+
+        private static termch, i4
+
+        private static method OpenTerminal, void
+        proc
+            open(termch=0,i,"tt:")
+        endmethod
+
+        public static method WriteLine, void
+            required in text, string
+        proc
+            if (!termch)
+                OpenTerminal()
+            writes(termch,text)
+        endmethod
+
+        public static method Write, void
+            required in text, string
+        proc
+            if (!termch)
+                OpenTerminal()
+            display(termch,text)
+        endmethod
+
+        public static method ReadLine, string
+        proc
+            if (!termch)
+                OpenTerminal()
+            begin
+                data text, a128
+                reads(termch,text)
+                mreturn %atrimtostring(text)
+            end
+        endmethod
+
+        public static method ReadKey, string
+        proc
+            if (!termch)
+                OpenTerminal()
+            begin
+                data text, a1
+                accept(termch,text)
+                begin
+                    data temp, a1
+                    while (%ttsts)
+                        accept(termch,temp)
+                end
+                mreturn (string)text
+            end
+        endmethod
+
+    endclass
+
+endnamespace

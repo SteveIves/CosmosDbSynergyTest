@@ -1,0 +1,458 @@
+
+import SynPSG.Azure.CosmosDB
+;.ifndef DBLNET
+;import SynPSG.TraditionalSynergyTools
+;.endc
+
+main
+    record
+        db,                         @CosmosDbSqlApiClient
+        ok,                         boolean, true
+        requestBody,                string
+        deleteDatabase,             boolean
+        deleteFamiliesCollection,   boolean
+        deleteWakefieldFamily,      boolean
+        deleteAndersenFamily,       boolean
+    endrecord
+proc
+    Console.WriteLine("Azure CosmosDB Test Application")
+    Console.WriteLine("================================================================================")
+
+    begin
+        data host, string
+        data mkey, string
+        .ifdef DBLNET
+        host = Environment.GetEnvironmentVariable("COSMOSDBHOST")
+        mkey = Environment.GetEnvironmentVariable("COSMOSDBMASTERKEY")
+        .else
+        data val, a128
+        data len, i4
+        xcall getlog("COSMOSDBHOST",val,len)
+        host = %atrim(val)
+        xcall getlog("COSMOSDBMASTERKEY",val,len)
+        mkey = %atrim(val)
+        .endc
+
+        db = new CosmosDbSqlApiClient(host,mkey)
+        
+    end
+
+    db.LoggingEnabled = true
+
+    ;;--------------------------------------------------------------------------------
+    ;; Get all databases (WORKING)
+
+    Console.WriteLine("Get all databases")
+
+    db.Read("/dbs")
+    call ReportStatus
+    Console.WriteLine(db.HttpResponseBody)
+    ok = db.Success
+
+    Console.WriteLine("================================================================================")
+
+    ;;--------------------------------------------------------------------------------
+    ;; Create database FamilyDB (WORKING)
+
+    if (ok)
+    begin
+        Console.WriteLine("Create database FamilyDB")
+
+        db.Create("/dbs",'{"id":"FamilyDB"}')
+        call ReportStatus
+        Console.WriteLine(db.HttpResponseBody)
+
+        if (db.Success) then
+        begin
+            deleteDatabase = true
+        end
+        else if (db.HttpStatusCode == 409) then
+        begin
+            deleteDatabase = true
+        end
+        else
+        begin
+            ok = false
+        end
+
+        Console.WriteLine("================================================================================")
+    end
+
+    ;;--------------------------------------------------------------------------------
+    ;; Get Database FamilyDB (WORKING)
+
+    if (ok)
+    begin
+        Console.WriteLine("Get Database FamilyDB")
+
+        db.Read("/dbs/FamilyDB")
+        call ReportStatus
+        Console.WriteLine(db.HttpResponseBody)
+        ok = db.Success
+
+        Console.WriteLine("================================================================================")
+    end
+
+    ;;--------------------------------------------------------------------------------
+    ;; Get Database FamilyDB Collections (WORKING)
+
+    if (ok)
+    begin
+        Console.WriteLine("Get Database FamilyDB Collections")
+
+        db.Read("/dbs/FamilyDB/colls")
+        call ReportStatus
+        Console.WriteLine(db.HttpResponseBody)
+        ok = db.Success
+
+        Console.WriteLine("================================================================================")        
+    end
+
+    ;;--------------------------------------------------------------------------------
+    ;; Create FamilyDB Collection "Families" (WORKING)
+
+    if (ok)
+    begin
+        Console.WriteLine("Create FamilyDB Collection Families")
+
+        db.Create("/dbs/FamilyDB/colls",'{"id":"Families"}')
+        call ReportStatus
+        Console.WriteLine(db.HttpResponseBody)
+
+        if (db.Success) then
+        begin
+            deleteFamiliesCollection = true
+        end
+        else if (db.HttpStatusCode == 409) then
+        begin
+            deleteFamiliesCollection = true
+        end
+        else
+        begin
+            ok = false
+        end
+
+        Console.WriteLine("================================================================================")        
+    end
+
+    ;;--------------------------------------------------------------------------------
+    ;; Get FamilyDB Collection Families
+
+    if (ok)
+    begin
+        Console.WriteLine("Get FamilyDB Collection Families")
+
+        db.Read("/dbs/FamilyDB/colls/Families")
+        call ReportStatus
+        Console.WriteLine(db.HttpResponseBody)
+        ok = db.Success
+
+        Console.WriteLine("================================================================================")        
+    end
+
+    ;;--------------------------------------------------------------------------------
+    ;; Create Document WakefieldFamily
+
+    if (ok)
+    begin
+        Console.WriteLine("Create Decument WakefieldFamily")
+
+        requestBody = '{'
+        &    +   '"id":"WakefieldFamily",'
+        &    +       '"parents":['
+        &    +           '{"familyName":"Wakefield","givenName":"Robin"},'
+        &    +           '{"familyName":"Miller","givenName":"Ben"}'
+        &    +       '],'
+        &    +       '"children":['
+        &    +           '{'
+        &    +               '"familyName":"Merriam",'
+        &    +               '"givenName":"Jesse",'
+        &    +               '"gender":"female","grade":1,'
+        &    +               '"pets": ['
+        &    +                   '{"givenName":"Goofy"},'
+        &    +                   '{"givenName":"Shadow"}'
+        &    +               ']'
+        &    +           '},'
+        &    +           '{'
+        &    +               '"familyName":"Miller",'
+        &    +                '"givenName":"Lisa",'
+        &    +                '"gender":"female",'
+        &    +                '"grade":8'
+        &    +           '}'
+        &    +       '],'
+        &    +       '"address":{"state":"NY","county":"Manhattan","city":"NY"},'
+        &    +       '"creationDate":1431620462,'
+        &    +       '"isRegistered":false'
+        &    +   '}'
+
+        db.Create("/dbs/FamilyDB/colls/Families/docs",requestBody)
+        call ReportStatus
+        Console.WriteLine(db.HttpResponseBody)
+
+        if (db.Success) then
+        begin
+            deleteWakefieldFamily = true
+        end
+        else if (db.HttpStatusCode == 409) then
+        begin
+            deleteWakefieldFamily = true
+        end
+        else
+        begin
+            ok = false
+        end
+
+        Console.WriteLine("================================================================================")        
+    end
+
+    ;;--------------------------------------------------------------------------------
+    ;; Get Document WakefieldFamily
+
+    if (ok)
+    begin
+        Console.WriteLine("Get Document WakefieldFamily")
+
+        db.Read("/dbs/FamilyDB/colls/Families/docs/WakefieldFamily")
+        call ReportStatus
+        Console.WriteLine(db.HttpResponseBody)
+        ok = db.Success
+
+        Console.WriteLine("================================================================================")        
+    end
+
+    ;;--------------------------------------------------------------------------------
+    ;; Update Document WakefieldFamily
+
+    if (ok)
+    begin
+        Console.WriteLine("Update Document WakefieldFamily")
+
+        requestBody = '{'
+        &    +   '"id":"WakefieldFamily",'
+        &    +      '"parents":['
+        &    +          '{"familyName":"Wakefield","givenName":"Robin"},'
+        &    +          '{"familyName":"Miller","givenName":"Ben"},'
+        &    +          '{"familyName":"Lindsay","givenName":"Steve"}'
+        &    +      '],'
+        &    +      '"children":['
+        &    +          '{'
+        &    +              '"familyName":"Merriam",'
+        &    +              '"givenName":"Jesse",'
+        &    +              '"gender":"female","grade":1,'
+        &    +              '"pets":['
+        &    +                  '{"givenName":"Goofy"},'
+        &    +                  '{"givenName":"Shadow"}'
+        &    +              ']'
+        &    +          '},'
+        &    +          '{'
+        &    +              '"familyName":"Miller",'
+        &    +              '"givenName":"Lisa",'
+        &    +              '"gender":"female",'
+        &    +              '"grade":8'
+        &    +          '}'
+        &    +      '],'
+        &    +      '"address":{"state":"NY","county":"Manhattan","city":"NY"},'
+        &    +      '"creationDate":1431620462,'
+        &    +      '"isRegistered":false'
+        &    +   '}'
+
+        db.Update("/dbs/FamilyDB/colls/Families/docs/WakefieldFamily",requestBody)
+        call ReportStatus
+        Console.WriteLine(db.HttpResponseBody)
+        ok = db.Success
+
+        Console.WriteLine("================================================================================")        
+    end
+
+    ;;--------------------------------------------------------------------------------
+    ;; Create Document AndersenFamily
+
+    if (ok)
+    begin
+        Console.WriteLine("Create Document AndersenFamily")
+
+        requestBody = '{'
+        &    +      '"id":"AndersenFamily",'
+        &    +      '"lastName":"Andersen",'
+        &    +      '"parents":['
+        &    +          '{"firstName":"Thomas"},'
+        &    +          '{"firstName":"MaryKay"}'
+        &    +      '],'
+        &    +      '"children":['
+        &    +          '{'
+        &    +              '"firstName":"HenrietteThaulow","gender":"female","grade":5,'
+        &    +              '"pets":[{"givenName":"Fluffy"}]'
+        &    +          '}'
+        &    +      '],'
+        &    +      '"address":{"state":"WA","county":"King","city":"seattle"},'
+        &    +      '"creationDate":1431620472,'
+        &    +      '"isRegistered":true'
+        &    +   '}'
+
+        db.Create("/dbs/FamilyDB/colls/Families/docs",requestBody)
+        call ReportStatus
+        Console.WriteLine(db.HttpResponseBody)
+
+        if (db.Success) then
+        begin
+            deleteAndersenFamily = true
+        end
+        else if (db.HttpStatusCode == 409) then
+        begin
+            deleteAndersenFamily = true
+        end
+        else
+        begin
+            ok = false
+        end
+
+        Console.WriteLine("================================================================================")        
+    end
+
+    ;;--------------------------------------------------------------------------------
+    ;; Get All Documents
+
+    if (ok)
+    begin
+        Console.WriteLine("Get All Documents")
+
+        db.Read("/dbs/FamilyDB/colls/Families/docs")
+        call ReportStatus
+        Console.WriteLine(db.HttpResponseBody)
+        ok = db.Success
+
+        Console.WriteLine("================================================================================")        
+    end
+
+    ;;--------------------------------------------------------------------------------
+    ;; Query Collection "Family = Andersen"
+
+    if (ok)
+    begin
+        Console.WriteLine("Query Collection Family = Andersen")
+
+        requestBody = '{'
+        &    +      '"query":"SELECT * FROM Families f WHERE f.id = @familyId",'
+        &    +      '"parameters":['
+        &    +          '{"name":"@familyId","value":"AndersenFamily"}'
+        &    +      ']'
+        &    +   '}'
+
+        db.Query("/dbs/FamilyDB/colls/Families/docs",requestBody)
+        call ReportStatus
+        Console.WriteLine(db.HttpResponseBody)
+        ok = db.Success
+
+        Console.WriteLine("================================================================================")        
+    end
+
+    ;;--------------------------------------------------------------------------------
+    ;; Query Collection With Join
+
+    if (ok)
+    begin
+        Console.WriteLine("Query Collection With Join")
+
+        requestBody = '{'
+        &    +  '"query": "SELECT '
+        &    +              'f.id AS familyName, '
+        &    +              'c.givenName AS childGivenName, '
+        &    +              'c.firstName AS childFirstName, '
+        &    +              'p.givenName AS petName '
+        &    +            'FROM Families f '
+        &    +            'JOIN c IN f.children '
+        &    +            'JOIN p in c.pets",' 
+        &    +      '"parameters": []'
+        &    +  '}'
+
+        db.Query("/dbs/FamilyDB/colls/Families/docs",requestBody)
+        call ReportStatus
+        Console.WriteLine(db.HttpResponseBody)
+        ok = db.Success
+
+        Console.WriteLine("================================================================================")        
+    end
+
+    ;;--------------------------------------------------------------------------------
+    ;; Delete Document WakefieldFamily
+
+    if (deleteWakefieldFamily)
+    begin
+        Console.WriteLine("Delete Document WakefieldFamily")
+
+        db.Delete("/dbs/FamilyDB/colls/Families/docs/WakefieldFamily")
+        call ReportStatus
+        ok = db.Success
+
+        Console.WriteLine("================================================================================")
+    end
+
+    ;;--------------------------------------------------------------------------------
+    ;; Delete Document AndersenFamily
+
+    if (deleteAndersenFamily)
+    begin
+        Console.WriteLine("Delete Document AndersenFamily")
+
+        db.Delete("/dbs/FamilyDB/colls/Families/docs/AndersenFamily")
+        call ReportStatus
+        ok = db.Success
+
+        Console.WriteLine("================================================================================")
+    end
+
+    ;;--------------------------------------------------------------------------------
+    ;; Delete Collection Families
+
+    if (deleteFamiliesCollection)
+    begin
+        Console.WriteLine("Delete FamilyDB Collection Families")
+
+        db.Delete("/dbs/FamilyDB/colls/Families")
+        call ReportStatus
+        ok = db.Success
+
+        Console.WriteLine("================================================================================")
+    end
+
+    ;--------------------------------------------------------------------------------
+    ; Delete Database FamilyDB
+
+    if (deleteDatabase)
+    begin
+        Console.WriteLine("Delete Database FamilyDB")
+
+        db.Delete("/dbs/FamilyDB")
+        call ReportStatus
+        ok = db.Success
+
+        Console.WriteLine("================================================================================")
+    end
+
+    .ifdef DBLNET
+    Console.Write("Press a key: ")
+    Console.ReadKey()
+    .else
+    begin
+        data tt,i4,0
+        data achar, a1
+        open(tt,i,"tt:")
+        display(tt,"Press a key: ")
+        accept(tt,achar)
+        close tt
+    end
+    .endc
+
+    stop
+
+ReportStatus,
+
+    .ifdef DBLNET
+    Console.WriteLine("Result: {0} ({1})",db.HttpStatusCode,db.HttpStatusText)
+    .else
+    Console.WriteLine("Result: "+%string(db.HttpStatusCode)+" ("+db.HttpStatusText+")")
+    .endc
+
+    return
+
+endmain

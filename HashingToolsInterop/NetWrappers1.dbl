@@ -1,0 +1,224 @@
+namespace HashingTools__ 
+	
+	
+	public class af_HashingTools__
+		
+			private static InternalDetails__Data, @DotNetAssembly
+				public static property Property__, @DotNetAssembly
+				method get
+				proc
+				if(InternalDetails__Data == ^NULL)
+					InternalDetails__Data = new DotNetAssembly("NETBIN:HashingTools.dll")
+				mreturn InternalDetails__Data
+				endmethod
+				endproperty
+				
+	
+	endclass
+
+endnamespace
+namespace m_NS_HashingTools 
+	
+	
+	public class m_CL Extends DotNetObject
+		
+		public  method m_CL
+		endparams 
+				parent(DotNetObject.Initialize__Internal__("_NS_HashingTools._CL", HashingTools__.af_HashingTools__.Property__), 1)
+		proc
+			begin
+				gennet_init_internal_handles()
+				
+			end
+		
+		endmethod
+		
+		public  method m_CL
+		id, int
+		internal, @m_CL
+		
+		endparams 
+				parent(id, 0)
+		proc
+		
+		endmethod
+		
+		public static method op_explicit, @m_NS_HashingTools.m_CL
+		convert, @object
+		
+		endparams
+		proc
+			begin
+				data nul, @m_NS_HashingTools.m_CL
+				mreturn new m_NS_HashingTools.m_CL(((dotNetObject)convert).SYNNETInternalHandle, nul)
+			end
+		
+		endmethod
+		
+		public override method ToString, @string
+		endparams
+		proc
+			begin
+				data ret, @string
+				parent.CallV("ToString",ret)
+				mreturn ret
+			end
+		
+		endmethod
+		
+		public method GetType, @System.Type
+		endparams
+		proc
+			begin
+				data ret, @System.Type
+				parent.CallV("GetType",ret)
+				mreturn ret
+			end
+		
+		endmethod
+		
+		public method gennet_init_internal_handles, void
+		endparams
+		proc
+			begin
+				
+			end
+		
+		endmethod
+	
+	endclass
+
+endnamespace
+namespace HashingTools 
+	
+	
+	public class HmacSha256Hash Extends DotNetObject
+		
+		public  method HmacSha256Hash
+		p__key, @string
+		
+		endparams 
+				parent(DotNetObject.Initialize__Internal__("HashingTools.HmacSha256Hash", HashingTools__.af_HashingTools__.Property__,p__key), 1)
+		proc
+			begin
+				gennet_init_internal_handles()
+				
+			end
+		
+		endmethod
+		
+		public  method HmacSha256Hash
+		id, int
+		internal, @HmacSha256Hash
+		
+		endparams 
+				parent(id, 0)
+		proc
+		
+		endmethod
+		
+		public static method op_explicit, @HashingTools.HmacSha256Hash
+		convert, @object
+		
+		endparams
+		proc
+			begin
+				data nul, @HashingTools.HmacSha256Hash
+				mreturn new HashingTools.HmacSha256Hash(((dotNetObject)convert).SYNNETInternalHandle, nul)
+			end
+		
+		endmethod
+		
+		public method ComputeHash, @string
+		p__text, @string
+		
+		endparams
+		proc
+			begin
+				data ret, @string
+				parent.CallV("ComputeHash",ret,p__text)
+				mreturn ret
+			end
+		
+		endmethod
+		
+		public override method ToString, @string
+		endparams
+		proc
+			begin
+				data ret, @string
+				parent.CallV("ToString",ret)
+				mreturn ret
+			end
+		
+		endmethod
+		
+		public method GetType, @System.Type
+		endparams
+		proc
+			begin
+				data ret, @System.Type
+				parent.CallV("GetType",ret)
+				mreturn ret
+			end
+		
+		endmethod
+		
+		public method gennet_init_internal_handles, void
+		endparams
+		proc
+			begin
+				
+			end
+		
+		endmethod
+	
+	endclass
+
+endnamespace
+namespace mscorlib__ 
+	
+	
+	public class af_mscorlib__
+		
+			private static InternalDetails__Data, @DotNetAssembly
+				public static property Property__, @DotNetAssembly
+				method get
+				proc
+				if(InternalDetails__Data == ^NULL)
+					InternalDetails__Data = new DotNetAssembly("mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")
+				mreturn InternalDetails__Data
+				endmethod
+				endproperty
+				
+	
+	endclass
+
+endnamespace
+namespace System 
+	
+	
+	public class Type Extends DotNetObject
+		
+		public  method Type
+		id, int
+		internal, @Type
+		
+		endparams 
+				parent(id, 0)
+		proc
+		
+		endmethod
+		
+		public method gennet_init_internal_handles, void
+		endparams
+		proc
+			begin
+				
+			end
+		
+		endmethod
+	
+	endclass
+
+endnamespace

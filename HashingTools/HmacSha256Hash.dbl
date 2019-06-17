@@ -1,0 +1,28 @@
+
+import System.Security.Cryptography
+import System.Text
+
+namespace HashingTools
+
+    public class HmacSha256Hash
+
+        private mKey, [#]byte
+
+        public method HmacSha256Hash
+            required in key, string
+        proc
+            mKey = Convert.FromBase64String(key)
+            nop
+        endmethod
+    
+        public method ComputeHash, string
+            required in text, string
+        proc
+            disposable data hmac, @HMACSHA256, new HMACSHA256(mKey)
+            data temp = Convert.ToBase64String(hmac.ComputeHash(Encoding.UTF8.GetBytes(text)))
+            mreturn temp
+        endmethod
+
+    endclass
+
+endnamespace

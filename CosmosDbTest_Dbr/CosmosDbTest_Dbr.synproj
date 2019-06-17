@@ -1,0 +1,85 @@
+﻿<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(SolutionDir)Common.props" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Configuration)' == '' ">x86</Platform>
+    <Name>CosmosDbTest_Dbr</Name>
+    <StartupObject>&lt;Synergy Main&gt;</StartupObject>
+    <OutputName>CosmosDbTest_Dbr</OutputName>
+    <ProjectGuid>{180cf95d-a53d-4fd4-ae14-91d37b7e5697}</ProjectGuid>
+    <ProjectTypeGuids>{7B8CF543-378A-4EC1-BB1B-98E4DC6E6820};{BBD0F5D1-1CC4-42fd-BA4C-A96779C64378}</ProjectTypeGuids>
+    <OutputType>application</OutputType>
+    <DBL_qTrim>True</DBL_qTrim>
+    <DBL_qAlign>True</DBL_qAlign>
+    <EnableCommonProperties>True</EnableCommonProperties>
+    <CommonPropertiesFileLocation>$(SolutionDir)Common.props</CommonPropertiesFileLocation>
+    <RootNamespace>CosmosDbTest_Dbr</RootNamespace>
+    <OtherOptions>-qrntcompat=11010100</OtherOptions>
+    <DBL_qRelaxed>False</DBL_qRelaxed>
+    <DBL_qRelaxedInterop>False</DBL_qRelaxedInterop>
+    <ProjEnvVars>SYNERGY_EXP_DEBUGGER=1</ProjEnvVars>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <IncludeDebugInformation>true</IncludeDebugInformation>
+    <OutputPath>$(SolutionDir)\$(Configuration)\$(Platform)</OutputPath>
+    <UnevaluatedOutputPath>EXEDIR:</UnevaluatedOutputPath>
+    <PlatformTarget>x86</PlatformTarget>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <DebugOptimize>Debug</DebugOptimize>
+    <TargetRuntimeLevel>11010100</TargetRuntimeLevel>
+    <LanguageCompatibilityLevel>11010100</LanguageCompatibilityLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <IncludeDebugInformation>true</IncludeDebugInformation>
+    <OutputPath>$(SolutionDir)\$(Configuration)\$(Platform)</OutputPath>
+    <UnevaluatedOutputPath>EXEDIR:</UnevaluatedOutputPath>
+    <PlatformTarget>x64</PlatformTarget>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <DebugOptimize>Debug</DebugOptimize>
+    <TargetRuntimeLevel>11010100</TargetRuntimeLevel>
+    <LanguageCompatibilityLevel>11010100</LanguageCompatibilityLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <IncludeDebugInformation>true</IncludeDebugInformation>
+    <OutputPath>$(SolutionDir)\$(Configuration)\$(Platform)</OutputPath>
+    <UnevaluatedOutputPath>EXEDIR:</UnevaluatedOutputPath>
+    <PlatformTarget>x86</PlatformTarget>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <DebugOptimize>Optimize</DebugOptimize>
+    <TargetRuntimeLevel>11010100</TargetRuntimeLevel>
+    <LanguageCompatibilityLevel>11010100</LanguageCompatibilityLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <IncludeDebugInformation>true</IncludeDebugInformation>
+    <OutputPath>$(SolutionDir)\$(Configuration)\$(Platform)</OutputPath>
+    <UnevaluatedOutputPath>EXEDIR:</UnevaluatedOutputPath>
+    <PlatformTarget>x64</PlatformTarget>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <DebugOptimize>Optimize</DebugOptimize>
+    <TargetRuntimeLevel>11010100</TargetRuntimeLevel>
+    <LanguageCompatibilityLevel>11010100</LanguageCompatibilityLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\CosmosDbTest_Net\CosmosDbSqlApiClient.dbl">
+      <Link>CosmosDbSqlApiClient.dbl</Link>
+    </Compile>
+    <Compile Include="..\CosmosDbTest_Net\Program.dbl">
+      <Link>Program.dbl</Link>
+    </Compile>
+    <Compile Include="Console.dbl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HashingToolsInterop\HashingToolsInterop.synproj">
+      <Name>HashingToolsInterop</Name>
+      <Project>{487cb673-a788-4ca8-8857-63a6ff2ac14e}</Project>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Synergex\dbl\Synergex.SynergyDE.Traditional.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>
